@@ -1,0 +1,33 @@
+worker_processes  1;
+
+# 使用绝对路径
+error_log  /project/workspace/Nginx/logs/error.log;
+pid        /project/workspace/Nginx/logs/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       /project/workspace/Nginx/mime.types;
+    default_type  application/octet-stream;
+
+    access_log  /project/workspace/Nginx/logs/access.log;
+    sendfile        on;
+    keepalive_timeout  65;
+
+    server {
+        listen       8099;
+        server_name  localhost;
+
+        location / {
+            root   /project/workspace/Nginx/html;
+            index  index.html index.htm;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   /project/workspace/Nginx/html;
+        }
+    }
+}
